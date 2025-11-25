@@ -53,8 +53,8 @@ function App() {
     }
 
     fetchTrack()
-    // Poll every 5 seconds
-    const interval = setInterval(fetchTrack, 5000)
+    // Poll every second
+    const interval = setInterval(fetchTrack, 1000)
 
     return () => clearInterval(interval)
   }, [isAuthenticated])

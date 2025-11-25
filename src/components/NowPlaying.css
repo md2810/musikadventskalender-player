@@ -1,24 +1,67 @@
-.now-playing-container {
+/* Fullscreen backdrop with album colors */
+.fullscreen-backdrop {
   position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
+  inset: 0;
+  z-index: 900;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease-out;
+  overflow: hidden;
 }
 
+.fullscreen-backdrop.visible {
+  opacity: 1;
+}
+
+.fullscreen-cover-bg {
+  position: absolute;
+  inset: -100px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(100px) saturate(150%) brightness(0.8);
+  transform: scale(1.3);
+}
+
+/* Wrapper for position animation */
+.now-playing-wrapper {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Default to collapsed position */
+  bottom: 2rem;
+  left: 50%;
+  right: auto;
+  top: auto;
+  transform: translateX(-50%);
+}
+
+.now-playing-wrapper.expanded {
+  inset: 0;
+  transform: none;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.now-playing-wrapper.collapsed {
+  bottom: 2rem;
+  left: 50%;
+  right: auto;
+  top: auto;
+  transform: translateX(-50%);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Main player container */
 .now-playing {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1.25rem;
 
   /* Liquid Glass Effect */
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-
-  /* Pill shape */
-  border-radius: 50px;
 
   /* Glass border */
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -29,29 +72,59 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.1);
 
-  /* Smooth transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
 
-  min-width: 320px;
-  max-width: 500px;
+/* Expanded state - fullscreen card */
+.now-playing-wrapper.expanded .now-playing {
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.25rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.12);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Collapsed state - pill */
+.now-playing-wrapper.collapsed .now-playing {
+  flex-direction: row;
+  width: 50vw;
+  padding: 0.75rem;
+  gap: 0.75rem;
+  border-radius: 16px;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .now-playing:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* Album cover */
 .album-cover {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Small cover in pill */
+.now-playing-wrapper.collapsed .album-cover {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Large cover in expanded */
+.now-playing-wrapper.expanded .album-cover {
+  width: 280px;
+  height: 280px;
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .album-cover img {
@@ -61,25 +134,49 @@
   display: block;
 }
 
+/* Track info */
 .track-info {
-  flex: 1;
   min-width: 0;
   color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Collapsed text style */
+.now-playing-wrapper.collapsed .track-info {
+  flex: 1;
+  text-align: left;
+  padding-right: 0.25rem;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expanded text style */
+.now-playing-wrapper.expanded .track-info {
+  text-align: center;
+  width: 100%;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .track-title {
-  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.01em;
 }
 
+.now-playing-wrapper.collapsed .track-title {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.now-playing-wrapper.expanded .track-title {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .track-artist {
-  font-size: 0.875rem;
   opacity: 0.9;
   white-space: nowrap;
   overflow: hidden;
@@ -87,25 +184,96 @@
   font-weight: 400;
 }
 
+.now-playing-wrapper.collapsed .track-artist {
+  font-size: 0.875rem;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.now-playing-wrapper.expanded .track-artist {
+  font-size: 1.125rem;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .no-track {
   color: white;
   font-size: 0.95rem;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.25rem;
 }
 
-/* Animation for appearance */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Progress bar */
+.progress-bar {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
 }
 
-.now-playing {
-  animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+.now-playing-wrapper.collapsed .progress-bar {
+  bottom: 4px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.now-playing-wrapper.expanded .progress-bar {
+  bottom: 10px;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 3px;
+  border-radius: 3px;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+/* Fallback container for no-track state */
+.now-playing-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.now-playing-container .now-playing {
+  width: 50vw;
+  flex-direction: row;
+  padding: 0.75rem;
+  gap: 0.75rem;
+  border-radius: 16px;
+}
+
+.now-playing-container .album-cover {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+}
+
+.now-playing-container .track-info {
+  flex: 1;
+  text-align: left;
+  padding-right: 0.25rem;
+}
+
+.now-playing-container .track-title {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.now-playing-container .track-artist {
+  font-size: 0.875rem;
+}
+
+.now-playing-container .progress-bar {
+  bottom: 4px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
 }

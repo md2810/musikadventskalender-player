@@ -142,10 +142,13 @@ export async function getCurrentlyPlaying() {
   }
 
   return {
+    id: data.item.id,
     name: data.item.name,
     artist: data.item.artists.map(artist => artist.name).join(', '),
     album: data.item.album.name,
     albumImage: data.item.album.images[0]?.url || '',
     isPlaying: data.is_playing,
+    progressMs: data.progress_ms || 0,
+    durationMs: data.item.duration_ms || 0,
   }
 }
