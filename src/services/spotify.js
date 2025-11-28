@@ -35,6 +35,9 @@ export function getSpotifyAuthUrl() {
   // Store code verifier for later use
   localStorage.setItem('code_verifier', codeVerifier)
 
+  // Log redirect URI for debugging
+  console.log('Frontend using redirect_uri:', REDIRECT_URI)
+
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
     response_type: 'code',

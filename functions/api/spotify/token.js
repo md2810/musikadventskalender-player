@@ -15,6 +15,26 @@ export async function onRequestPost(context) {
     const CLIENT_SECRET = context.env.SPOTIFY_CLIENT_SECRET
     const REDIRECT_URI = context.env.SPOTIFY_REDIRECT_URI
 
+    // Check for missing environment variables
+    if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI) {
+      console.error('Missing env vars:', {
+        hasClientId: !!CLIENT_ID,
+        hasClientSecret: !!CLIENT_SECRET,
+        hasRedirectUri: !!REDIRECT_URI
+      })
+      return new Response(JSON.stringify({
+        error: 'Server configuration error',
+        missing: {
+          CLIENT_ID: !CLIENT_ID,
+          CLIENT_SECRET: !CLIENT_SECRET,
+          REDIRECT_URI: !REDIRECT_URI
+        }
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
       code: code,
@@ -34,7 +54,12 @@ export async function onRequestPost(context) {
     if (!response.ok) {
       const error = await response.text()
       console.error('Spotify token error:', error)
-      return new Response(JSON.stringify({ error: 'Failed to get token' }), {
+      console.error('Used redirect_uri:', REDIRECT_URI)
+      return new Response(JSON.stringify({
+        error: 'Failed to get token',
+        spotify_error: error,
+        redirect_uri_used: REDIRECT_URI
+      }), {
         status: response.status,
         headers: { 'Content-Type': 'application/json' }
       })
