@@ -9,6 +9,45 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+}
+
+/* Slideshow background variant */
+.app.slideshow-bg {
+  background-image: none;
+  background-color: #000;
+}
+
+.slideshow-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+}
+
+.slideshow-image {
+  position: absolute;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  opacity: 0;
+  -webkit-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.slideshow-image.active {
+  opacity: 1;
 }
 
 .loading {
@@ -20,12 +59,14 @@
   backdrop-filter: blur(10px);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
 }
 
 .login-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
 .login-button {

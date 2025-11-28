@@ -1,12 +1,20 @@
 /* Fullscreen backdrop with album colors */
 .fullscreen-backdrop {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 900;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.8s ease-out;
   overflow: hidden;
+  /* WebKit optimizations */
+  -webkit-transition: opacity 0.8s ease-out;
+  transition: opacity 0.8s ease-out;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: opacity;
 }
 
 .fullscreen-backdrop.visible {
@@ -15,11 +23,18 @@
 
 .fullscreen-cover-bg {
   position: absolute;
-  inset: -100px;
+  top: -100px;
+  left: -100px;
+  right: -100px;
+  bottom: -100px;
   background-size: cover;
   background-position: center;
+  -webkit-filter: blur(100px) saturate(150%) brightness(0.8);
   filter: blur(100px) saturate(150%) brightness(0.8);
-  transform: scale(1.3);
+  -webkit-transform: scale(1.3) translateZ(0);
+  transform: scale(1.3) translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* Wrapper for position animation */
@@ -34,13 +49,33 @@
   left: 50%;
   right: auto;
   top: auto;
-  transform: translateX(-50%);
+  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
+  /* WebKit optimizations */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  will-change: transform, top, bottom, left, right;
 }
 
 .now-playing-wrapper.expanded {
-  inset: 0;
-  transform: none;
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      top 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      left 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      right 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      bottom 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              left 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              right 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              bottom 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .now-playing-wrapper.collapsed {
@@ -48,8 +83,18 @@
   left: 50%;
   right: auto;
   top: auto;
-  transform: translateX(-50%);
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
+  -webkit-transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      top 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      left 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      right 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      bottom 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+              top 1s cubic-bezier(0.4, 0, 0.2, 1),
+              left 1s cubic-bezier(0.4, 0, 0.2, 1),
+              right 1s cubic-bezier(0.4, 0, 0.2, 1),
+              bottom 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Main player container */
@@ -58,10 +103,10 @@
   display: flex;
   align-items: center;
 
-  /* Liquid Glass Effect */
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Liquid Glass Effect - more frosted */
+  background: rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
 
   /* Glass border */
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -73,6 +118,13 @@
     inset 0 -1px 0 rgba(255, 255, 255, 0.1);
 
   cursor: pointer;
+
+  /* WebKit optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform, width, padding, border-radius, flex-direction, gap;
 }
 
 /* Expanded state - fullscreen card */
@@ -81,8 +133,24 @@
   padding: 1.5rem;
   gap: 1.25rem;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.12);
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.22);
+  -webkit-transition: padding 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      gap 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-radius 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      background 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: padding 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              gap 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              background 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* No glass effect in expanded songshow mode */
+.now-playing.no-glass {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Collapsed state - pill */
@@ -92,7 +160,14 @@
   padding: 0.75rem;
   gap: 0.75rem;
   border-radius: 16px;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: width 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      padding 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      gap 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-radius 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 1s cubic-bezier(0.4, 0, 0.2, 1),
+              gap 1s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .now-playing:hover {
@@ -108,6 +183,12 @@
   overflow: hidden;
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  /* WebKit optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: width, height, border-radius, box-shadow;
 }
 
 /* Small cover in pill */
@@ -115,7 +196,14 @@
   width: 56px;
   height: 56px;
   border-radius: 8px;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: width 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      height 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-radius 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1),
+              height 1s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 1s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Large cover in expanded */
@@ -124,7 +212,14 @@
   height: 280px;
   border-radius: 16px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-radius 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .album-cover img {
@@ -132,6 +227,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  /* Prevent image from flickering during animation */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* Track info */
@@ -139,6 +237,10 @@
   min-width: 0;
   color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  /* WebKit optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: text-align;
 }
 
 /* Collapsed text style */
@@ -146,14 +248,16 @@
   flex: 1;
   text-align: left;
   padding-right: 0.25rem;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: padding 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: padding 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Expanded text style */
 .now-playing-wrapper.expanded .track-info {
   text-align: center;
   width: 100%;
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .track-title {
@@ -162,18 +266,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.01em;
+  will-change: font-size, margin;
 }
 
 .now-playing-wrapper.collapsed .track-title {
   font-size: 1rem;
   margin-bottom: 0.25rem;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: font-size 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      margin 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: font-size 1s cubic-bezier(0.4, 0, 0.2, 1),
+              margin 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .now-playing-wrapper.expanded .track-title {
   font-size: 1.75rem;
   margin-bottom: 0.5rem;
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: font-size 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      margin 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: font-size 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              margin 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .track-artist {
@@ -182,16 +293,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 400;
+  will-change: font-size;
 }
 
 .now-playing-wrapper.collapsed .track-artist {
   font-size: 0.875rem;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: font-size 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: font-size 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .now-playing-wrapper.expanded .track-artist {
   font-size: 1.125rem;
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: font-size 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: font-size 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .no-track {
@@ -207,6 +321,10 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
+  /* WebKit optimizations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: bottom, left, right, height;
 }
 
 .now-playing-wrapper.collapsed .progress-bar {
@@ -214,7 +332,14 @@
   left: 12px;
   right: 12px;
   height: 2px;
-  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: bottom 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      left 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      right 1s cubic-bezier(0.4, 0, 0.2, 1),
+                      height 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: bottom 1s cubic-bezier(0.4, 0, 0.2, 1),
+              left 1s cubic-bezier(0.4, 0, 0.2, 1),
+              right 1s cubic-bezier(0.4, 0, 0.2, 1),
+              height 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .now-playing-wrapper.expanded .progress-bar {
@@ -223,14 +348,24 @@
   right: 1.5rem;
   height: 3px;
   border-radius: 3px;
-  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition: bottom 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      left 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      right 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                      height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: bottom 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              left 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              right 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .progress-bar-fill {
   height: 100%;
   background: rgba(255, 255, 255, 0.35);
   border-radius: 2px;
+  -webkit-transition: width 0.1s linear;
   transition: width 0.1s linear;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* Fallback container for no-track state */
@@ -238,7 +373,8 @@
   position: fixed;
   bottom: 2rem;
   left: 50%;
-  transform: translateX(-50%);
+  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
   z-index: 1000;
 }
 
