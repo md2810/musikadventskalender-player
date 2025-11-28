@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSettings } from '../contexts/SettingsContext'
 import './NowPlaying.css'
 
-function NowPlaying({ track }) {
+function NowPlaying({ track, forceDisableSongshow = false }) {
+  const { settings } = useSettings()
   const [displayedTrack, setDisplayedTrack] = useState(null)
   const [localProgress, setLocalProgress] = useState(0)
   const [isExpanded, setIsExpanded] = useState(false)
@@ -12,6 +14,17 @@ function NowPlaying({ track }) {
   const lastTrackIdRef = useRef(null)
   const collapseTimerRef = useRef(null)
   const expandTimerRef = useRef(null)
+
+  // Determine if songshow should be disabled
+  const isSongshowDisabled = forceDisableSongshow || settings.songshowMode === 'off'
+  const isSongshowAlwaysOn = !forceDisableSongshow && settings.songshowMode === 'always'
+
+  // Glass styles based on settings
+  const glassBackground = settings.glassStyle === 'light'
+    ? `rgba(255, 255, 255, ${settings.glassOpacity / 100})`
+    : `rgba(0, 0, 0, ${settings.glassOpacity / 100})`
+
+  const glassBackdrop = `blur(${settings.glassBlur}px) saturate(180%)`
 
   // Extract dominant color from album art
   const extractColor = (imageUrl) => {
@@ -52,7 +65,7 @@ function NowPlaying({ track }) {
   useEffect(() => {
     if (!track) {
       setDisplayedTrack(null)
-      setIsExpanded(false)
+      setIsExpanded(isSongshowAlwaysOn)
       lastTrackIdRef.current = null
       return
     }
@@ -78,20 +91,25 @@ function NowPlaying({ track }) {
       setLocalProgress(track.progressMs)
       extractColor(track.albumImage)
 
-      // Small delay then expand (so we animate FROM collapsed TO expanded)
-      expandTimerRef.current = setTimeout(() => {
+      // Handle songshow based on mode
+      if (isSongshowAlwaysOn) {
+        // Always expanded
         setIsExpanded(true)
-      }, 50)
+      } else if (!isSongshowDisabled) {
+        // Timed mode
+        expandTimerRef.current = setTimeout(() => {
+          setIsExpanded(true)
+        }, 50)
 
-      // Collapse after 4 seconds
-      collapseTimerRef.current = setTimeout(() => {
-        setIsExpanded(false)
-      }, 4000)
+        collapseTimerRef.current = setTimeout(() => {
+          setIsExpanded(false)
+        }, settings.songshowDuration * 1000)
+      }
     } else {
       // Same track, just update data
       setDisplayedTrack(track)
     }
-  }, [track])
+  }, [track, isSongshowDisabled, isSongshowAlwaysOn, settings.songshowDuration])
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -132,11 +150,26 @@ function NowPlaying({ track }) {
     ? (localProgress / displayedTrack.durationMs) * 100
     : 0
 
+  // Dynamic styles
+  const playerStyle = {
+    background: glassBackground,
+    backdropFilter: glassBackdrop,
+    WebkitBackdropFilter: glassBackdrop,
+  }
+
+  const collapsedWidthStyle = {
+    width: `${settings.playerWidth}vw`,
+  }
+
   if (!displayedTrack) {
     return (
       <div className="now-playing-container">
         <canvas ref={canvasRef} style={{ display: 'none' }} />
-        <div className="now-playing" onClick={toggleFullscreen}>
+        <div
+          className="now-playing"
+          style={{ ...playerStyle, ...collapsedWidthStyle }}
+          onClick={toggleFullscreen}
+        >
           <div className="no-track">
             Kein Song wird gerade abgespielt
           </div>
@@ -161,7 +194,11 @@ function NowPlaying({ track }) {
       </div>
 
       <div className={`now-playing-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
-        <div className="now-playing" onClick={toggleFullscreen}>
+        <div
+          className={`now-playing ${isExpanded ? 'no-glass' : ''}`}
+          style={isExpanded ? {} : { ...playerStyle, ...collapsedWidthStyle }}
+          onClick={toggleFullscreen}
+        >
           <div className="album-cover">
             <img
               src={displayedTrack.albumImage}
@@ -172,12 +209,14 @@ function NowPlaying({ track }) {
             <div className="track-title">{displayedTrack.name}</div>
             <div className="track-artist">{displayedTrack.artist}</div>
           </div>
-          <div className="progress-bar">
-            <div
-              className="progress-bar-fill"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
+          {settings.showProgressBar && !isExpanded && (
+            <div className="progress-bar">
+              <div
+                className="progress-bar-fill"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

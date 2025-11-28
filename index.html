@@ -2,9 +2,44 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Musikadventskalender Player</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Musikadventskalender - Zeigt den aktuell spielenden Spotify Song mit wunderschönen Animationen" />
+    <meta name="theme-color" content="#0d1b2a" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Musikadventskalender Player" />
+    <meta property="og:description" content="Zeigt den aktuell spielenden Spotify Song mit wunderschönen Animationen" />
+
+    <!-- iOS/iPadOS Web App - Fullscreen Mode -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Musikadventskalender" />
+
+    <!-- Prevent iOS zooming on input focus -->
+    <style>
+      /* Prevent body scrolling for app-like feel */
+      html, body {
+        position: fixed;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      /* Safe area padding for notch/home indicator */
+      body {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
