@@ -86,7 +86,7 @@ function BouncingBadge() {
           transition: 'color 0.15s ease',
         }}
       >
-        Letzter Tag - Nur noch wenige Tickets verfügbar
+        {settings.badgeText}
       </span>
     </div>
   )

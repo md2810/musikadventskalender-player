@@ -24,6 +24,7 @@ const defaultSettings = {
 
   // Bouncing Badge
   badgeSpeed: 3, // 1-10
+  badgeText: 'Letzter Tag - Nur noch wenige Tickets verfügbar',
 }
 
 const SettingsContext = createContext(null)

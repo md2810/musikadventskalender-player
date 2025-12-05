@@ -204,6 +204,19 @@ function Settings() {
 
           <div className="setting-item">
             <label>
+              <span>Text</span>
+            </label>
+            <input
+              type="text"
+              value={settings.badgeText}
+              onChange={(e) => updateSetting('badgeText', e.target.value)}
+              placeholder="Banner-Text eingeben..."
+              className="text-input"
+            />
+          </div>
+
+          <div className="setting-item">
+            <label>
               <span>Geschwindigkeit</span>
               <span className="value">{settings.badgeSpeed}</span>
             </label>
