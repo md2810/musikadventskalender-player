@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import './App.css'
 import NowPlaying from './components/NowPlaying'
 import Settings from './components/Settings'
+import BouncingBadge from './components/BouncingBadge'
 import { SettingsProvider, useSettings } from './contexts/SettingsContext'
 import { getSpotifyAuthUrl, handleCallback, getCurrentlyPlaying } from './services/spotify'
 
@@ -166,6 +167,7 @@ function PlayerPage({ forceDisableSongshow = false, slideshowImages = null }) {
   return (
     <div className={`app ${slideshowImages ? 'slideshow-bg' : ''}`}>
       {slideshowImages && <Slideshow images={slideshowImages} />}
+      <BouncingBadge />
       {!isAuthenticated ? (
         <div className="login-container">
           <button className="login-button" onClick={handleLogin}>

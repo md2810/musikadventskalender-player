@@ -21,6 +21,9 @@ const defaultSettings = {
 
   // Zoom
   zoomLevel: 100, // 50-150%
+
+  // Bouncing Badge
+  badgeSpeed: 3, // 1-10
 }
 
 const SettingsContext = createContext(null)

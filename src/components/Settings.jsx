@@ -198,6 +198,25 @@ function Settings() {
           </div>
         </section>
 
+        {/* Bouncing Badge Section */}
+        <section className="settings-section">
+          <h2>Ticket-Banner</h2>
+
+          <div className="setting-item">
+            <label>
+              <span>Geschwindigkeit</span>
+              <span className="value">{settings.badgeSpeed}</span>
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={settings.badgeSpeed}
+              onChange={(e) => updateSetting('badgeSpeed', Number(e.target.value))}
+            />
+          </div>
+        </section>
+
         {/* Keyboard Shortcuts */}
         <section className="settings-section">
           <h2>Tastenkürzel</h2>
