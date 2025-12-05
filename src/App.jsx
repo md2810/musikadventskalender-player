@@ -167,7 +167,7 @@ function PlayerPage({ forceDisableSongshow = false, slideshowImages = null }) {
   return (
     <div className={`app ${slideshowImages ? 'slideshow-bg' : ''}`}>
       {slideshowImages && <Slideshow images={slideshowImages} />}
-      <BouncingBadge />
+      <BouncingBadge track={currentTrack} />
       {!isAuthenticated ? (
         <div className="login-container">
           <button className="login-button" onClick={handleLogin}>

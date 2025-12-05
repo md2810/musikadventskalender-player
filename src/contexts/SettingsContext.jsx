@@ -23,8 +23,20 @@ const defaultSettings = {
   zoomLevel: 100, // 50-150%
 
   // Bouncing Badge
+  badgeEnabled: true,
   badgeSpeed: 3, // 1-10
   badgeText: 'Letzter Tag - Nur noch wenige Tickets verfügbar',
+  badgeSize: 100, // 50-150%
+  badgeBlinkSpeed: 500, // 200-1000ms
+  badgeColor1: '#ff0000', // red
+  badgeColor2: '#ffff00', // yellow
+  // Visual effects
+  badgeRotation: false,
+  badgePulse: true,
+  badgeTrail: true,
+  badgeGlow: true,
+  badgeBounceEffect: true,
+  badgeBeatSync: true, // Sync pulse to song BPM
 }
 
 const SettingsContext = createContext(null)

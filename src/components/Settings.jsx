@@ -204,6 +204,26 @@ function Settings() {
 
           <div className="setting-item">
             <label>
+              <span>Banner anzeigen</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgeEnabled ? 'active' : ''}
+                onClick={() => updateSetting('badgeEnabled', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgeEnabled ? 'active' : ''}
+                onClick={() => updateSetting('badgeEnabled', false)}
+              >
+                Aus
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-item">
+            <label>
               <span>Text</span>
             </label>
             <input
@@ -217,7 +237,22 @@ function Settings() {
 
           <div className="setting-item">
             <label>
-              <span>Geschwindigkeit</span>
+              <span>Größe</span>
+              <span className="value">{settings.badgeSize}%</span>
+            </label>
+            <input
+              type="range"
+              min="50"
+              max="150"
+              step="10"
+              value={settings.badgeSize}
+              onChange={(e) => updateSetting('badgeSize', Number(e.target.value))}
+            />
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Bewegungs-Geschwindigkeit</span>
               <span className="value">{settings.badgeSpeed}</span>
             </label>
             <input
@@ -227,6 +262,169 @@ function Settings() {
               value={settings.badgeSpeed}
               onChange={(e) => updateSetting('badgeSpeed', Number(e.target.value))}
             />
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Blink-Geschwindigkeit</span>
+              <span className="value">{settings.badgeBlinkSpeed}ms</span>
+            </label>
+            <input
+              type="range"
+              min="200"
+              max="1000"
+              step="100"
+              value={settings.badgeBlinkSpeed}
+              onChange={(e) => updateSetting('badgeBlinkSpeed', Number(e.target.value))}
+            />
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Farbe 1</span>
+              <span className="value">{settings.badgeColor1}</span>
+            </label>
+            <input
+              type="color"
+              value={settings.badgeColor1}
+              onChange={(e) => updateSetting('badgeColor1', e.target.value)}
+              className="color-input"
+            />
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Farbe 2</span>
+              <span className="value">{settings.badgeColor2}</span>
+            </label>
+            <input
+              type="color"
+              value={settings.badgeColor2}
+              onChange={(e) => updateSetting('badgeColor2', e.target.value)}
+              className="color-input"
+            />
+          </div>
+
+          <h3 className="settings-subheader">Visuelle Effekte</h3>
+
+          <div className="setting-item">
+            <label>
+              <span>Rotation</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgeRotation ? 'active' : ''}
+                onClick={() => updateSetting('badgeRotation', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgeRotation ? 'active' : ''}
+                onClick={() => updateSetting('badgeRotation', false)}
+              >
+                Aus
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Pulsieren</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgePulse ? 'active' : ''}
+                onClick={() => updateSetting('badgePulse', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgePulse ? 'active' : ''}
+                onClick={() => updateSetting('badgePulse', false)}
+              >
+                Aus
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Schweif</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgeTrail ? 'active' : ''}
+                onClick={() => updateSetting('badgeTrail', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgeTrail ? 'active' : ''}
+                onClick={() => updateSetting('badgeTrail', false)}
+              >
+                Aus
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Leuchteffekt</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgeGlow ? 'active' : ''}
+                onClick={() => updateSetting('badgeGlow', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgeGlow ? 'active' : ''}
+                onClick={() => updateSetting('badgeGlow', false)}
+              >
+                Aus
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Abprall-Effekt</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgeBounceEffect ? 'active' : ''}
+                onClick={() => updateSetting('badgeBounceEffect', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgeBounceEffect ? 'active' : ''}
+                onClick={() => updateSetting('badgeBounceEffect', false)}
+              >
+                Aus
+              </button>
+            </div>
+          </div>
+
+          <div className="setting-item">
+            <label>
+              <span>Beat-Sync (Pulsieren zum Song)</span>
+            </label>
+            <div className="button-group">
+              <button
+                className={settings.badgeBeatSync ? 'active' : ''}
+                onClick={() => updateSetting('badgeBeatSync', true)}
+              >
+                An
+              </button>
+              <button
+                className={!settings.badgeBeatSync ? 'active' : ''}
+                onClick={() => updateSetting('badgeBeatSync', false)}
+              >
+                Aus
+              </button>
+            </div>
           </div>
         </section>
 

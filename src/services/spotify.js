@@ -103,6 +103,61 @@ async function refreshAccessToken() {
   return data.access_token
 }
 
+// Cache for audio features to avoid excessive API calls
+const audioFeaturesCache = new Map()
+
+// Get audio features for a track (includes BPM/tempo)
+async function getAudioFeatures(trackId) {
+  // Check cache first
+  if (audioFeaturesCache.has(trackId)) {
+    return audioFeaturesCache.get(trackId)
+  }
+
+  let accessToken = localStorage.getItem('spotify_access_token')
+
+  if (!accessToken) {
+    return null
+  }
+
+  try {
+    let response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+
+    // If token expired, refresh and retry
+    if (response.status === 401) {
+      accessToken = await refreshAccessToken()
+      response = await fetch(`https://api.spotify.com/v1/audio-features/${trackId}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      })
+    }
+
+    if (!response.ok) {
+      return null
+    }
+
+    const data = await response.json()
+
+    // Cache the result
+    audioFeaturesCache.set(trackId, data)
+
+    // Limit cache size
+    if (audioFeaturesCache.size > 50) {
+      const firstKey = audioFeaturesCache.keys().next().value
+      audioFeaturesCache.delete(firstKey)
+    }
+
+    return data
+  } catch (error) {
+    console.error('Failed to fetch audio features:', error)
+    return null
+  }
+}
+
 // Get currently playing track
 export async function getCurrentlyPlaying() {
   let accessToken = localStorage.getItem('spotify_access_token')
@@ -144,6 +199,9 @@ export async function getCurrentlyPlaying() {
     return null
   }
 
+  // Fetch audio features for BPM
+  const audioFeatures = await getAudioFeatures(data.item.id)
+
   return {
     id: data.item.id,
     name: data.item.name,
@@ -153,5 +211,8 @@ export async function getCurrentlyPlaying() {
     isPlaying: data.is_playing,
     progressMs: data.progress_ms || 0,
     durationMs: data.item.duration_ms || 0,
+    // Audio features
+    tempo: audioFeatures?.tempo || null, // BPM
+    energy: audioFeatures?.energy || null,
   }
 }
